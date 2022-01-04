@@ -8,7 +8,8 @@
     "compile": "npx hardhat --verbose --show-stack-traces compile",
     "test": "npx hardhat --verbose test",
     "deploy:localhost": "npx hardhat run scripts/deploy.ts --network localhost",
-    "deploy:rinkeby": "npx hardhat --verbose run scripts/deploy.ts --network rinkeby"
+    "deploy:rinkeby": "npx hardhat --verbose run scripts/deploy.ts --network rinkeby",
+    "deploy:fantom": "npx hardhat --verbose run scripts/deploy.ts --network testnetFantom"
   },
   "repository": {
     "type": "git",
