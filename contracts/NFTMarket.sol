@@ -1,172 +1,125 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.10;
 
-import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
-import "../node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol";
+contract Array {
+    // Several ways to initialize an array
+    uint[] public arr;
+    uint[] public arr2 = [1, 2, 3];
+    // Fixed sized array, all elements initialize to 0
+    uint[10] public myFixedSizeArr;
 
-contract NFTMarket is ReentrancyGuard {
-    using Counters for Counters.Counter;
-    Counters.Counter private _itemIds;
-    Counters.Counter private _itemsSold;
-
-    address payable owner;
-    uint256 listingPrice = 0.025 ether;
-
-    constructor() {
-        owner = payable(msg.sender);
+    function get(uint i) public view returns (uint) {
+        return arr[i];
     }
 
-    struct MarketItem {
-        uint256 itemId;
-        address nftContract;
-        uint256 tokenId;
-        address payable seller;
-        address payable owner;
-        uint256 price;
-        bool sold;
+    // Solidity can return the entire array.
+    // But this function should be avoided for
+    // arrays that can grow indefinitely in length.
+    function getArr() public view returns (uint[] memory) {
+        return arr;
     }
 
-    mapping(uint256 => MarketItem) private idToMarketItem;
-
-    event MarketItemCreated(
-        uint256 indexed itemId,
-        address indexed nftContract,
-        uint256 indexed tokenId,
-        address seller,
-        address owner,
-        uint256 price,
-        bool sold
-    );
-
-    /* Returns the listing price of the contract */
-    function getListingPrice() public view returns (uint256) {
-        return listingPrice;
+    function push(uint i) public {
+        // Append to array
+        // This will increase the array length by 1.
+        arr.push(i);
     }
 
-    /* Places an item for sale on the marketplace */
-    function createMarketItem(
-        address nftContract,
-        uint256 tokenId,
-        uint256 price
-    ) public payable nonReentrant {
-        require(price > 0, "Price must be at least 1 wei");
-        require(
-            msg.value == listingPrice,
-            "Price must be equal to listing price"
-        );
-
-        _itemIds.increment();
-        uint256 itemId = _itemIds.current();
-
-        idToMarketItem[itemId] = MarketItem(
-            itemId,
-            nftContract,
-            tokenId,
-            payable(msg.sender),
-            payable(address(0)),
-            price,
-            false
-        );
-
-        IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
-
-        emit MarketItemCreated(
-            itemId,
-            nftContract,
-            tokenId,
-            msg.sender,
-            address(0),
-            price,
-            false
-        );
+    function pop() public {
+        // Remove last element from array
+        // This will decrease the array length by 1
+        arr.pop();
     }
 
-    /* Creates the sale of a marketplace item */
-    /* Transfers ownership of the item, as well as funds between parties */
-    function createMarketSale(address nftContract, uint256 itemId)
-        public
-        payable
-        nonReentrant
-    {
-        uint256 price = idToMarketItem[itemId].price;
-        uint256 tokenId = idToMarketItem[itemId].tokenId;
-        require(
-            msg.value == price,
-            "Please submit the asking price in order to complete the purchase"
-        );
-
-        idToMarketItem[itemId].seller.transfer(msg.value);
-        IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
-        idToMarketItem[itemId].owner = payable(msg.sender);
-        idToMarketItem[itemId].sold = true;
-        _itemsSold.increment();
-        payable(owner).transfer(listingPrice);
+    function getLength() public view returns (uint) {
+        return arr.length;
     }
 
-    /* Returns all unsold market items */
-    function fetchMarketItems() public view returns (MarketItem[] memory) {
-        uint256 itemCount = _itemIds.current();
-        uint256 unsoldItemCount = _itemIds.current() - _itemsSold.current();
-        uint256 currentIndex = 0;
-
-        MarketItem[] memory items = new MarketItem[](unsoldItemCount);
-        for (uint256 i = 0; i < itemCount; i++) {
-            if (idToMarketItem[i + 1].owner == address(0)) {
-                uint256 currentId = i + 1;
-                MarketItem storage currentItem = idToMarketItem[currentId];
-                items[currentIndex] = currentItem;
-                currentIndex += 1;
-            }
-        }
-        return items;
+    function remove(uint index) public {
+        // Delete does not change the array length.
+        // It resets the value at index to it's default value,
+        // in this case 0
+        delete arr[index];
     }
 
-    /* Returns onlyl items that a user has purchased */
-    function fetchMyNFTs() public view returns (MarketItem[] memory) {
-        uint256 totalItemCount = _itemIds.current();
-        uint256 itemCount = 0;
-        uint256 currentIndex = 0;
-
-        for (uint256 i = 0; i < totalItemCount; i++) {
-            if (idToMarketItem[i + 1].owner == msg.sender) {
-                itemCount += 1;
-            }
-        }
-
-        MarketItem[] memory items = new MarketItem[](itemCount);
-        for (uint256 i = 0; i < totalItemCount; i++) {
-            if (idToMarketItem[i + 1].owner == msg.sender) {
-                uint256 currentId = i + 1;
-                MarketItem storage currentItem = idToMarketItem[currentId];
-                items[currentIndex] = currentItem;
-                currentIndex += 1;
-            }
-        }
-        return items;
-    }
-
-    /* Returns only items a user has created */
-    function fetchItemsCreated() public view returns (MarketItem[] memory) {
-        uint256 totalItemCount = _itemIds.current();
-        uint256 itemCount = 0;
-        uint256 currentIndex = 0;
-
-        for (uint256 i = 0; i < totalItemCount; i++) {
-            if (idToMarketItem[i + 1].seller == msg.sender) {
-                itemCount += 1;
-            }
-        }
-
-        MarketItem[] memory items = new MarketItem[](itemCount);
-        for (uint256 i = 0; i < totalItemCount; i++) {
-            if (idToMarketItem[i + 1].seller == msg.sender) {
-                uint256 currentId = i + 1;
-                MarketItem storage currentItem = idToMarketItem[currentId];
-                items[currentIndex] = currentItem;
-                currentIndex += 1;
-            }
-        }
-        return items;
+    function examples() external {
+        // create array in memory, only fixed size can be created
+        uint[] memory a = new uint[](5);
     }
 }
+Examples of removing array element
+Remove array element by shifting elements from right to left
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+contract ArrayRemoveByShifting {
+    // [1, 2, 3] -- remove(1) --> [1, 3, 3] --> [1, 3]
+    // [1, 2, 3, 4, 5, 6] -- remove(2) --> [1, 2, 4, 5, 6, 6] --> [1, 2, 4, 5, 6]
+    // [1, 2, 3, 4, 5, 6] -- remove(0) --> [2, 3, 4, 5, 6, 6] --> [2, 3, 4, 5, 6]
+    // [1] -- remove(0) --> [1] --> []
+
+    uint[] public arr;
+
+    function remove(uint _index) public {
+        require(_index < arr.length, "index out of bound");
+
+        for (uint i = _index; i < arr.length - 1; i++) {
+            arr[i] = arr[i + 1];
+        }
+        arr.pop();
+    }
+
+    function test() external {
+        arr = [1, 2, 3, 4, 5];
+        remove(2);
+        // [1, 2, 4, 5]
+        assert(arr[0] == 1);
+        assert(arr[1] == 2);
+        assert(arr[2] == 4);
+        assert(arr[3] == 5);
+        assert(arr.length == 4);
+
+        arr = [1];
+        remove(0);
+        // []
+        assert(arr.length == 0);
+    }
+}
+Remove array element by copying last element into to the place to remove
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+contract ArrayReplaceFromEnd {
+    uint[] public arr;
+
+    // Deleting an element creates a gap in the array.
+    // One trick to keep the array compact is to
+    // move the last element into the place to delete.
+    function remove(uint index) public {
+        // Move the last element into the place to delete
+        arr[index] = arr[arr.length - 1];
+        // Remove the last element
+        arr.pop();
+    }
+
+    function test() public {
+        arr = [1, 2, 3, 4];
+
+        remove(1);
+        // [1, 4, 3]
+        assert(arr.length == 3);
+        assert(arr[0] = 1);
+        assert(arr[1] = 4);
+        assert(arr[2] = 3);
+
+        remove(2);
+        // [1, 4]
+        assert(arr.length == 2);
+        assert(arr[0] = 1);
+        assert(arr[1] = 4);
+    }
+} 

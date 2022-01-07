@@ -7,6 +7,7 @@
     "hardhat": "hardhat",
     "compile": "npx hardhat --verbose --show-stack-traces compile",
     "test": "npx hardhat --verbose test",
+    "explore:rinkeby": "npx hardhat --verbose run scripts/explore.ts --network rinkeby",
     "deploy:localhost": "npx hardhat run scripts/deploy.ts --network localhost",
     "deploy:rinkeby": "npx hardhat --verbose run scripts/deploy.ts --network rinkeby",
     "deploy:fantom": "npx hardhat --verbose run scripts/deploy.ts --network testnetFantom"
