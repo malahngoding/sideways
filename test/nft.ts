@@ -16,8 +16,7 @@ describe("NFT", async () => {
     expect(nftContractAddress.length).equals(42);
   });
   it("Should creating token", async () => {
-    const newNFT = await nft.createToken("https://jsonkeeper.com/b/RUUS");
-    console.log(newNFT);
+    await nft.createToken("https://jsonkeeper.com/b/RUUS");
   });
   it("Should match NFT URI", async () => {
     await nft.createToken("https://jsonkeeper.com/b/RUUS");
