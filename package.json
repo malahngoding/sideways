@@ -9,8 +9,9 @@
     "test": "npx hardhat test",
     "explore:rinkeby": "npx hardhat --verbose run scripts/explore.ts --network rinkeby",
     "deploy:localhost": "npx hardhat run scripts/deploy.ts --network localhost",
-    "deploy:rinkeby": "npx hardhat --verbose run scripts/deploy.ts --network rinkeby",
-    "deploy:fantom": "npx hardhat --verbose run scripts/deploy.ts --network testnetFantom"
+    "deploy:rinkeby": "npx hardhat run scripts/deploy.ts --network rinkeby",
+    "deploy:fantom": "npx hardhat run scripts/deploy.ts --network testnetFantom",
+    "deploy:telos": "npx hardhat run scripts/deploy.ts --network testnetTelos"
   },
   "repository": {
     "type": "git",
