@@ -7,11 +7,9 @@
     "hardhat": "hardhat",
     "compile": "npx hardhat --verbose --show-stack-traces compile",
     "test": "npx hardhat test",
-    "deploy:hedera": "npx hardhat run scripts/sc/hedera.ts",
-    "explore:rinkeby": "npx hardhat --verbose run scripts/explore.ts --network rinkeby",
     "deploy:localhost": "npx hardhat run scripts/deploy.ts --network localhost",
-    "deploy:rinkeby": "npx hardhat run scripts/deploy.ts --network rinkeby",
-    "deploy:telos": "npx hardhat run scripts/deploy.ts --network testnetTelos"
+    "deploy:hedera": "npx hardhat run scripts/sc/hedera.ts",
+    "deploy:fantom": "npx hardhat run scripts/deploy.ts --network testnetFantom"
   },
   "repository": {
     "type": "git",
