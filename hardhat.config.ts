@@ -25,9 +25,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const config: HardhatUserConfig = {
   solidity: "0.8.9",
   networks: {
-    testnetFantom: {
-      url: "https://rpc.testnet.fantom.network/",
-      chainId: 4002,
+    testnetMumbai: {
+      url: "https://matic-mumbai.chainstacklabs.com/",
+      chainId: 80001,
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },

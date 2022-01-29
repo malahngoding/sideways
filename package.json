@@ -9,14 +9,14 @@
     "test": "npx hardhat test",
     "deploy:localhost": "npx hardhat run scripts/deploy.ts --network localhost",
     "deploy:hedera": "npx hardhat run scripts/sc/hedera.ts",
-    "deploy:fantom": "npx hardhat run scripts/deploy.ts --network testnetFantom"
+    "deploy:mumbai": "npx hardhat run scripts/deploy.ts --network testnetMumbai"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/malahngoding/sideways.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/malahngoding/sideways/issues"
   },
