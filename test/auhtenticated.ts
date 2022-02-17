@@ -18,11 +18,6 @@ describe("Authenticated", async () => {
     const authStatus = await authenticated.checkIsUserLogged(wallet.address);
     expect(authStatus).equals(false);
   });
-  it("Address be able to log in", async () => {
-    await authenticated.login(wallet.address, "Password123!");
-    const authStatus = await authenticated.checkIsUserLogged(wallet.address);
-    expect(authStatus).equals(true);
-  });
   it("Address be able to log out", async () => {
     await authenticated.logout(wallet.address);
     const authStatus = await authenticated.checkIsUserLogged(wallet.address);
