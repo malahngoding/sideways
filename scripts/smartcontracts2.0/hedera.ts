@@ -7,7 +7,7 @@ import {
   ContractFunctionParameters,
 } from "@hashgraph/sdk";
 
-export default async function main() {
+export const deployHelloHedera = async () => {
   // Set Operator Client
   const client = Client.forTestnet().setOperator(
     process.env.HEDERA_ACCOUNT_ID || "",
@@ -36,10 +36,9 @@ export default async function main() {
   const contractReceipt = await contractResponse.getReceipt(client);
   const newContractId = contractReceipt.contractId;
   console.log("The smart contract ID is " + newContractId);
-  return newContractId;
-}
+  console.log(
+    "While solidity address is " + newContractId?.toSolidityAddress()
+  );
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+  return newContractId;
+};

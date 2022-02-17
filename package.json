@@ -8,7 +8,7 @@
     "compile": "npx hardhat --verbose --show-stack-traces compile",
     "test": "npx hardhat test",
     "deploy:localhost": "npx hardhat run scripts/deploy.ts --network localhost",
-    "deploy:hedera": "npx hardhat run scripts/sc/hedera.ts",
+    "deploy:hedera": "npx hardhat run scripts/smartcontracts2.0/deploy.ts",
     "deploy:mumbai": "npx hardhat run scripts/deploy.ts --network testnetMumbai"
   },
   "repository": {
