@@ -3,42 +3,24 @@ pragma solidity ^0.8.9;
 
 import "../node_modules/hardhat/console.sol";
 
-contract Authenticated {
+contract Authenticated  {
     struct UserDetail {
-        address addr;
-        bytes32 password;
-        bool isUserLoggedIn;
+        string service;
+        bool userSummoned;
     }
 
-    mapping(address => UserDetail) user;
+    mapping(string => UserDetail) user;
 
-    function register(address _address, string memory _password) public {
-        require(user[_address].addr != msg.sender);
-        user[_address].addr = _address;
-        user[_address].password = keccak256(abi.encodePacked(_password));
-        user[_address].isUserLoggedIn = false;
+    function summon(string memory _token, string memory _service) public  {
+          user[_token].service = _service;
+         user[_token].userSummoned = true;
     }
 
-    function login(address _address, string memory _password)
-        public
-        returns (bool)
-    {
-        console.log(_address, _password, msg.sender);
-        if (keccak256(abi.encodePacked(_password)) == user[_address].password) {
-            user[_address].isUserLoggedIn = true;
-            return true;
-        } else {
-            return false;
-        }
+    function cast(string memory _token) public view  returns (bool) {
+         return (user[_token].userSummoned);
     }
 
-    function checkIsUserLogged(address _address) public view returns (bool) {
-        return (user[_address].isUserLoggedIn);
-    }
-
-    function logout(address _address) public returns (bool) {
-        require(user[_address].addr != msg.sender);
-        user[_address].isUserLoggedIn = false;
-        return true;
-    }
+    function revoke(string memory _token) public  {
+          user[_token].userSummoned = false;
+     }
 }

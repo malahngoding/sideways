@@ -13,14 +13,14 @@ describe("Authenticated", async () => {
     await authenticated.deployed();
     wallet = ethers.Wallet.createRandom();
   });
-  it("Address be able to register", async () => {
-    await authenticated.register(wallet.address, "Password123!");
-    const authStatus = await authenticated.checkIsUserLogged(wallet.address);
-    expect(authStatus).equals(false);
+  it("Address be able to summon", async () => {
+    await authenticated.summon(wallet.address, "GITHUB");
+    const authStatus = await authenticated.cast(wallet.address);
+    expect(authStatus).equals(true);
   });
-  it("Address be able to log out", async () => {
-    await authenticated.logout(wallet.address);
-    const authStatus = await authenticated.checkIsUserLogged(wallet.address);
+  it("Address be able to revoke", async () => {
+    await authenticated.revoke(wallet.address);
+    const authStatus = await authenticated.cast(wallet.address);
     expect(authStatus).equals(false);
   });
 });

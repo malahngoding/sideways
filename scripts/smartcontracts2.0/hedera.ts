@@ -5,6 +5,7 @@ import {
   FileCreateTransaction,
   ContractCreateTransaction,
   ContractFunctionParameters,
+  Hbar,
 } from "@hashgraph/sdk";
 
 export const deployHelloHedera = async () => {
@@ -14,13 +15,13 @@ export const deployHelloHedera = async () => {
     process.env.HEDERA_PRIVATE_KEY || ""
   );
   // Contract byte handling
-  const contractName = "HelloHedera";
+  const contractName = "Authenticated";
   console.log(`Uploading ${contractName} bytecode to Hedera File Service`);
   const HelloHedera = await ethers.getContractFactory(contractName);
 
-  const fileCreateTx = new FileCreateTransaction().setContents(
-    HelloHedera.bytecode
-  );
+  const fileCreateTx = new FileCreateTransaction()
+    .setContents(HelloHedera.bytecode)
+    .setMaxTransactionFee(new Hbar(100));
   const submitTx = await fileCreateTx.execute(client);
   const fileReceipt = await submitTx.getReceipt(client);
   const bytecodeFileId = fileReceipt.fileId;
