@@ -2,20 +2,20 @@
 pragma solidity ^0.8.9;
 
 contract HelloHedera {
-    address owner;
-    string message;
+    address private owner;
+    string private message;
 
     constructor(string memory message_) {
         owner = msg.sender;
         message = message_;
     }
 
-    function set_message(string memory message_) public {
+    function setMessage(string memory message_) public {
         if (msg.sender != owner) return;
         message = message_;
     }
 
-    function get_message() public view returns (string memory) {
+    function getMessage() public view returns (string memory) {
         return message;
     }
 

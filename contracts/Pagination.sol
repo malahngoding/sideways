@@ -12,7 +12,7 @@ contract Pagination {
         bool isAnimated;
     }
 
-    Todo[] todos;
+    Todo[] private todos;
 
     function concatenate(string memory a, string memory b)
         public
