@@ -9,7 +9,7 @@ contract NFT is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    constructor() ERC721("Malah Ngoding Spaces", "MNS") {}
+    constructor() ERC721("Spaces", "MNS") {}
 
     function createToken(string memory tokenURI) public returns (uint256) {
         uint256 newItemId = _tokenIds.current();
