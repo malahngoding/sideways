@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "../node_modules/@openzeppelin/contracts/utils/Strings.sol";
-import "../node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract Pagination {
     struct Todo {
